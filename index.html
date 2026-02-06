@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UAX - Estructura de Computadores</title>
+    <title>UAX - Estructura de Computadores (Oficial)</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -58,7 +58,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
         }
 
         .quiz-container { width: 100%; max-width: 500px; }
@@ -148,88 +147,85 @@
     <script>
         const rawQuestions = [
             // UD1
-            {u:"UD1", q:"Los transistores pertenecen a la generación de computadores...", o:["Tercera.", "Primera.", "Cuarta.", "Segunda."], c:3},
-            {u:"UD1", q:"En una memoria (UD1):", o:["Tantos bits almacenados como 2^líneas.", "La cantidad total de datos almacenada es potencia de 2.", "En cada posición de memoria hay almacenado un dato útil.", "Número de posiciones es 2^bits de entrada."], c:1},
-            {u:"UD1", q:"Como estudiantes recién graduados... nos piden diseñar una computadora para un sistema empotrado, ¿qué arquitectura recomendarías?", o:["Un Macintosh.", "Harvard.", "Von Neumann.", "Un servidor Windows."], c:1},
-            {u:"UD1", q:"Respecto a la arquitectura: Es von Neumann si el bus de datos y el de instrucciones es compartido.", o:["Verdadero", "Es Harvard si comparten bus.", "Falso", "Ninguna."], c:0},
-            {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Parte del computador donde se almacenan datos.", "Se pierde la información si se interrumpe el flujo eléctrico.", "No necesita energía.", "Ninguna."], c:1},
-            {u:"UD1", q:"El registro de instrucción...", o:["Contiene valores de ejecución.", "Ninguna de las otras respuestas.", "Siguiente instrucción en ensamblador.", "Actual instrucción en ensamblador."], c:1},
-            {u:"UD1", q:"Es Harvard si las instrucciones pueden tener distinto tamaño que los datos.", o:["Verdadero", "Falso", "Solo en Von Neumann", "Ninguna."], c:0},
-            {u:"UD1", q:"El CP (contador de programa), ¿a dónde apunta?", o:["A la siguiente instrucción.", "A la instrucción en curso.", "A la instrucción previa.", "Ninguna."], c:0},
-            {u:"UD1", q:"El lenguaje máquina ...", o:["Ninguna.", "Es un lenguaje de bajo nivel.", "Es muy alto nivel.", "Es alto nivel."], c:1},
-            {u:"UD1", q:"La primera generación de computadores se caracterizó por usar:", o:["Circuitos integrados.", "Tubos al vacío.", "Transistores.", "Chips."], c:1},
+            {u:"UD1", q:"Los transistores pertenecen a la generación de computadores:", o:["Tercera.", "Primera.", "Cuarta.", "Segunda."], c:3},
+            {u:"UD1", q:"En una memoria, el número de posiciones de memoria que se pueden direccionar viene dado por:", o:["La cantidad de bits de los datos almacenados.", "2 elevado al número de bits del bus de direcciones.", "La velocidad del reloj.", "El número de registros de la CPU."], c:1},
+            {u:"UD1", q:"Si nos piden diseñar una computadora para un sistema empotrado, ¿qué arquitectura recomendarías?", o:["Arquitectura de Von Neumann.", "Arquitectura Harvard.", "Arquitectura de un Macintosh.", "Arquitectura de un servidor Windows."], c:1},
+            {u:"UD1", q:"Una arquitectura es de Von Neumann si el bus de datos y el de instrucciones es compartido:", o:["Verdadero.", "Falso.", "Es Harvard si comparten bus.", "Depende del fabricante."], c:0},
+            {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Mantiene la información sin energía eléctrica.", "Se pierde la información si se interrumpe el flujo eléctrico.", "Es una memoria de solo lectura.", "Se utiliza para el almacenamiento masivo a largo plazo."], c:1},
+            {u:"UD1", q:"El registro de instrucción contiene:", o:["La dirección de la siguiente instrucción.", "La instrucción que se está ejecutando actualmente.", "Los datos de entrada de la ALU.", "El resultado de la última operación."], c:1},
+            {u:"UD1", q:"Es Harvard si las instrucciones pueden tener distinto tamaño que los datos:", o:["Verdadero.", "Falso.", "Solo ocurre en Von Neumann.", "Ninguna de las anteriores."], c:0},
+            {u:"UD1", q:"El contador de programa (CP) apunta a:", o:["La instrucción en curso.", "La siguiente instrucción a ejecutar.", "La instrucción previa.", "La dirección de inicio de la memoria."], c:1},
+            {u:"UD1", q:"El lenguaje máquina se caracteriza por:", o:["Ser un lenguaje de alto nivel.", "Ser un lenguaje de bajo nivel directamente entendible por el hardware.", "Utilizar palabras en inglés para las instrucciones.", "Necesitar un intérprete para ejecutarse."], c:1},
+            {u:"UD1", q:"La primera generación de computadores se caracterizó por usar:", o:["Circuitos integrados.", "Tubos al vacío.", "Transistores.", "Microprocesadores."], c:1},
 
             // UD2
-            {u:"UD2", q:"Respecto al reloj: Es difícil comparar dos procesadores de dos arquitecturas distintas.", o:["Verdadero", "Falso", "Solo por MIPS", "Solo por Frecuencia"], c:0},
-            {u:"UD2", q:"Respecto al CPI: A mayor CPI menos MIPS.", o:["Verdadero", "Falso", "No dependen", "Solo en RISC"], c:0},
-            {u:"UD2", q:"MIPS con 2 MHz y media de 3 instrucciones por ciclo:", o:["6.", "3/2.", "No se sabe.", "2000/3."], c:0},
-            {u:"UD2", q:"Señala la FALSA: La velocidad de reloj permite comparar arquitecturas.", o:["Cierto", "Falso", "Es la respuesta falsa", "Depende del CPI"], c:2},
-            {u:"UD2", q:"Verdadera: Los procesadores superescalares se utilizan en tareas intensivas de cálculo.", o:["Falso", "Solo en móviles", "Verdadero", "Solo en servidores"], c:2},
-            {u:"UD2", q:"Un ciclo de 1 ns son:", o:["10 G.", "1 G.", "No se sabe.", "2 G."], c:1},
-            {u:"UD2", q:"Respecto al CPI: No aporta nada sobre la rapidez de ejecución de los programas.", o:["Cierto", "Falso", "Depende", "Solo en CISC"], c:0},
-            {u:"UD2", q:"Los MFLOPS: Están relacionados con el CPI.", o:["Verdadero", "Falso", "Son universales", "Miden todo"], c:0},
-            {u:"UD2", q:"FALSA: Los multicomputadores tienen memoria compartida.", o:["Cierto", "Es falsa", "Tienen nodos", "Paso de mensajes"], c:1},
-            {u:"UD2", q:"Segmentación: Se puede solucionar dependencias con instrucciones NOP.", o:["Verdadero", "Falso", "Solo hardware", "Solo software"], c:0},
+            {u:"UD2", q:"Respecto al reloj: Es difícil comparar dos procesadores de dos arquitecturas distintas basándose solo en la frecuencia.", o:["Verdadero.", "Falso.", "Solo es posible con MIPS.", "Solo es posible con MFLOPS."], c:0},
+            {u:"UD2", q:"Respecto al CPI (Ciclos Por Instrucción): A mayor CPI:", o:["Mayor es el número de MIPS.", "Menor es el número de MIPS.", "La ejecución es siempre más rápida.", "No influye en el rendimiento."], c:1},
+            {u:"UD2", q:"Si un procesador tiene una frecuencia de 2 MHz y una media de 3 ciclos por instrucción, ¿cuántos MIPS alcanza?", o:["6 MIPS.", "0.66 MIPS.", "1.5 MIPS.", "No se puede calcular."], c:1},
+            {u:"UD2", q:"Señala la respuesta FALSA sobre el rendimiento:", o:["El tiempo de ejecución es la medida más fiable.", "La velocidad de reloj permite comparar arquitecturas distintas directamente.", "El CPI depende de la organización del procesador.", "MIPS mide millones de instrucciones por segundo."], c:1},
+            {u:"UD2", q:"Los procesadores superescalares permiten:", o:["Ejecutar más de una instrucción por ciclo de reloj.", "Aumentar la memoria RAM del sistema.", "Reducir el consumo eléctrico a cero.", "Eliminar la necesidad de buses de datos."], c:0},
+            {u:"UD2", q:"Un ciclo de reloj de 1 nanosegundo (ns) corresponde a una frecuencia de:", o:["10 GHz.", "1 GHz.", "100 MHz.", "1 MHz."], c:1},
+            {u:"UD2", q:"El CPI (Ciclos Por Instrucción) de un programa depende de:", o:["Solo de la frecuencia de reloj.", "Del repertorio de instrucciones y la organización del procesador.", "Únicamente del lenguaje de programación.", "Del tamaño del disco duro."], c:1},
+            {u:"UD2", q:"Los MFLOPS (Millones de Operaciones de Punto Flotante por Segundo) miden:", o:["El rendimiento en operaciones de enteros.", "El rendimiento en cálculos matemáticos complejos.", "La velocidad de acceso a disco.", "La capacidad de la memoria caché."], c:1},
+            {u:"UD2", q:"¿Cuál de las siguientes afirmaciones es FALSA sobre los multicomputadores?", o:["Cada nodo tiene su propia memoria local.", "Tienen memoria compartida global.", "Se comunican mediante paso de mensajes.", "Son sistemas escalables."], c:1},
+            {u:"UD2", q:"En la segmentación (pipelining), las dependencias de datos pueden solucionarse mediante:", o:["Inserción de instrucciones NOP o adelantamiento (forwarding).", "Aumentando el voltaje del procesador.", "Reduciendo el número de registros.", "Cambiando a arquitectura Harvard."], c:0},
 
             // UD3
-            {u:"UD3", q:"El lenguaje ensamblador: Se llama de bajo nivel porque está más cerca del hardware.", o:["Cierto", "Falso", "Medio nivel", "Alto nivel"], c:0},
-            {u:"UD3", q:"MIPS32 tiene un conjunto reducido de instrucciones.", o:["Verdadero", "Falso (CISC)", "Es complejo", "No tiene"], c:0},
-            {u:"UD3", q:"¿Qué instrucción en MIPS32 se utiliza para sumar dos registros?", o:["SUB", "ADD", "DIV", "MUL"], c:1},
-            {u:"UD3", q:"Direccionamiento indirecto a registro con desplazamiento utiliza base + desplazamiento.", o:["Falso", "Cierto", "Solo inmediato", "Solo directo"], c:1},
-            {u:"UD3", q:"Verdadera: El código máquina en memoria se ejecuta sin compilador.", o:["Falso", "Cierto", "Necesita Linker", "Necesita Assembler"], c:1},
-            {u:"UD3", q:"Little Endian: El byte menos significativo se coloca en la primera posición.", o:["Cierto", "Falso", "Aleatorio", "Última posición"], c:0},
-            {u:"UD3", q:"MIPS32: Su arquitectura es de carga/almacenamiento.", o:["Cierto", "Falso", "Es CISC", "Solo memoria"], c:0},
-            {u:"UD3", q:"Pseudoinstrucción: El ensamblador la traduce a una o más instrucciones máquina.", o:["Falso", "Cierto", "Es ilegal", "Solo kernel"], c:1},
-            {u:"UD3", q:"Ensamblador: Es muy parecido entre procesadores distintos, aunque depende de la arquitectura.", o:["Falso", "Cierto", "Idéntico", "Diferente"], c:1},
-            {u:"UD3", q:"MIPS32: El modo kernel tiene más permisos sobre el hardware.", o:["Cierto", "Falso", "Igual que usuario", "No existe"], c:0},
+            {u:"UD3", q:"El lenguaje ensamblador se considera de bajo nivel porque:", o:["Es muy fácil de aprender para humanos.", "Está muy cerca de la arquitectura física del hardware.", "No permite realizar operaciones matemáticas.", "Se utiliza solo para aplicaciones web."], c:1},
+            {u:"UD3", q:"La arquitectura MIPS32 se define como una arquitectura de tipo:", o:["CISC (Complex Instruction Set Computer).", "RISC (Reduced Instruction Set Computer).", "VLIW.", "De flujo de datos."], c:1},
+            {u:"UD3", q:"¿Qué instrucción MIPS32 se utiliza para realizar una suma?", o:["SUB.", "ADD.", "LOAD.", "STORE."], c:1},
+            {u:"UD3", q:"El direccionamiento indirecto a registro con desplazamiento utiliza:", o:["Un registro base y un valor inmediato (offset).", "Dos registros sumados.", "Solo una dirección de memoria directa.", "Solo un valor inmediato."], c:0},
+            {u:"UD3", q:"El código máquina almacenado en memoria se caracteriza por:", o:["Estar escrito en lenguaje C.", "Ser una secuencia binaria que la CPU ejecuta directamente.", "Necesitar un compilador en tiempo de ejecución.", "Ser independiente de la arquitectura del procesador."], c:1},
+            {u:"UD3", q:"En un sistema Little Endian:", o:["El byte más significativo se guarda en la dirección más baja.", "El byte menos significativo se guarda en la dirección más baja.", "Los datos se guardan de forma aleatoria.", "No se utilizan bytes."], c:1},
+            {u:"UD3", q:"MIPS32 utiliza una arquitectura de carga/almacenamiento (load/store), lo que significa que:", o:["Las operaciones aritméticas pueden usar operandos en memoria directamente.", "Solo las instrucciones de carga y almacenamiento acceden a la memoria principal.", "No existe la memoria RAM.", "No se necesitan registros."], c:1},
+            {u:"UD3", q:"Una pseudoinstrucción en ensamblador es:", o:["Una instrucción ilegal que detiene el procesador.", "Una instrucción simplificada que el ensamblador traduce a instrucciones reales.", "Una instrucción que solo entiende el usuario.", "Un comentario en el código."], c:1},
+            {u:"UD3", q:"El lenguaje ensamblador es específico para cada arquitectura de procesador:", o:["Verdadero.", "Falso.", "Es universal para todos los procesadores.", "Solo depende del sistema operativo."], c:0},
+            {u:"UD3", q:"En MIPS32, el modo kernel permite:", o:["Ejecutar cualquier instrucción y acceder a todo el hardware.", "Restringir el acceso a la memoria.", "Solo ejecutar aplicaciones de usuario.", "Apagar el procesador."], c:0},
 
             // UD4
-            {u:"UD4", q:"Código 'mul $t2, $t0, $t1': Multiplica a y b y almacena en c.", o:["Cierto", "Suma", "Resta", "Divide"], c:0},
-            {u:"UD4", q:"'lb' en MIPS32: Carga un byte extendiéndolo con signo.", o:["Almacena", "Carga palabra", "Cierto", "Sin signo"], c:2},
-            {u:"UD4", q:"Código 'sub $t2, $t0, $t1': Resta el valor de b de a.", o:["Suma", "Cierto", "Multiplica", "Divide"], c:1},
-            {u:"UD4", q:"Cargar byte extendiéndolo con ceros (sin signo):", o:["lbu", "lw", "lb", "sb"], c:0},
-            {u:"UD4", q:"beq/bne: Compara x e y, almacena 1 en z si son iguales, sino 0.", o:["Suma", "Resta", "Cierto", "Falso"], c:2},
-            {u:"UD4", q:"Cargar una palabra desde memoria a registro:", o:["lb", "sb", "sw", "lw"], c:3},
-            {u:"UD4", q:"Cargar valor inmediato en un registro:", o:["sw", "sb", "li", "lw"], c:2},
-            {u:"UD4", q:"Formato de instrucciones en MIPS32:", o:["Variable", "Fijo 32 bits.", "Fijo 64 bits", "8 bits"], c:1},
-            {u:"UD4", q:"Almacenar un byte desde registro en memoria:", o:["sw", "sb", "lb", "lw"], c:1},
-            {u:"UD4", q:"'div' y 'mfhi $t2': Divide val por 4 y almacena el residuo.", o:["Cociente", "Cierto", "Suma", "Resta"], c:1},
+            {u:"UD4", q:"La instrucción 'mul $t2, $t0, $t1' en MIPS32:", o:["Suma t0 y t1.", "Multiplica t0 por t1 y guarda el resultado en t2.", "Resta t1 de t0.", "Divide t0 entre t1."], c:1},
+            {u:"UD4", q:"La instrucción 'lb' (load byte) en MIPS32:", o:["Carga un byte y rellena con ceros.", "Carga un byte y extiende el signo al resto del registro.", "Guarda un registro en un byte de memoria.", "Carga una palabra de 32 bits."], c:1},
+            {u:"UD4", q:"La instrucción 'sub $t2, $t0, $t1' realiza:", o:["t2 = t0 + t1.", "t2 = t0 - t1.", "t2 = t1 - t0.", "t0 = t1 - t2."], c:1},
+            {u:"UD4", q:"Para cargar un byte de memoria sin extender el signo (rellenando con ceros) se usa:", o:["lb.", "lw.", "lbu.", "sb."], c:2},
+            {u:"UD4", q:"Las instrucciones 'beq' y 'bne' se utilizan para:", o:["Saltos incondicionales.", "Saltos condicionales basados en una comparación.", "Operaciones aritméticas.", "Acceso a memoria."], c:1},
+            {u:"UD4", q:"¿Qué instrucción carga una palabra completa (32 bits) de memoria a un registro?", o:["lb.", "sb.", "sw.", "lw."], c:3},
+            {u:"UD4", q:"Para cargar un valor constante (inmediato) en un registro se usa la instrucción:", o:["sw.", "li.", "lw.", "add."], c:1},
+            {u:"UD4", q:"El formato de las instrucciones en MIPS32 es:", o:["Variable (de 8 a 64 bits).", "Fijo de 32 bits.", "Fijo de 16 bits.", "Depende de la instrucción."], c:1},
+            {u:"UD4", q:"La instrucción 'sb' (store byte) sirve para:", o:["Cargar un byte de memoria.", "Almacenar el byte menos significativo de un registro en memoria.", "Sumar un byte.", "Saltar a una dirección."], c:1},
+            {u:"UD4", q:"La combinación de 'div' y 'mfhi' permite obtener:", o:["El cociente de la división.", "El resto (residuo) de la división.", "La suma de los operandos.", "El valor absoluto."], c:1},
 
             // UD5
-            {u:"UD5", q:"Unidad de control: Gestiona y coordina las operaciones.", o:["E/S", "Cierto", "Almacena", "ALU"], c:1},
-            {u:"UD5", q:"MIPS32 tiene un ancho del bus de direcciones de 4 bytes.", o:["Cierto", "Falso", "8 bytes", "2 bytes"], c:0},
-            {u:"UD5", q:"Unidad de control: Puede cambiar el salto a su siguiente estado según ruta datos.", o:["Falso", "Cierto", "Sin reloj", "No puede"], c:1},
-            {u:"UD5", q:"Reloj: Es una señal cuadrada (ceros y unos).", o:["Sinusoidal", "Sierra", "Cierto", "Cualquier forma"], c:2},
-            {u:"UD5", q:"Un ciclo de 1 ns es 1 G de frecuencia.", o:["Cierto", "Falso", "2 G", "10 G"], c:0},
-            {u:"UD5", q:"Bus: Líneas de transmisión que permiten comunicación hardware.", o:["Disco", "Cierto", "RAM", "E/S"], c:1},
-            {u:"UD5", q:"FETCH: Se busca la instrucción en la memoria principal.", o:["Ejecuta", "Cierto", "Decodifica", "Almacena"], c:1},
-            {u:"UD5", q:"Fase Fetch (UD5): Carga datos de memoria.", o:["Cierto", "Hacia memoria", "No memoria", "Solo registros"], c:0},
-            {u:"UD5", q:"Ruta de datos: Contiene registros.", o:["Falso", "Moore", "Cierto", "Solo cables"], c:2},
-            {u:"UD5", q:"ALU: Solamente opera con registros.", o:["Con memoria", "Cierto", "Pone a cero", "Directo a disco"], c:1},
+            {u:"UD5", q:"La Unidad de Control tiene como función principal:", o:["Realizar cálculos aritméticos.", "Gestionar y coordinar todas las operaciones del computador.", "Almacenar los datos permanentemente.", "Conectar el ratón y el teclado."], c:1},
+            {u:"UD5", q:"En MIPS32, el ancho del bus de direcciones es de:", o:["16 bits.", "32 bits (4 bytes).", "64 bits.", "8 bits."], c:1},
+            {u:"UD5", q:"La Unidad de Control es una máquina de estados finitos que:", o:["No depende del reloj.", "Genera señales de control basadas en la instrucción actual.", "Solo funciona con arquitectura Harvard.", "No puede realizar saltos."], c:1},
+            {u:"UD5", q:"La señal de reloj en un procesador es:", o:["Una señal analógica variable.", "Una señal cuadrada que sincroniza las operaciones.", "La que indica la hora del sistema.", "Una señal de audio."], c:1},
+            {u:"UD5", q:"Si un ciclo de reloj dura 1 nanosegundo, la frecuencia de trabajo es:", o:["100 MHz.", "1 GHz.", "2 GHz.", "10 GHz."], c:1},
+            {u:"UD5", q:"Un bus se define como:", o:["Un registro de gran tamaño.", "Líneas de transmisión compartidas para comunicación entre componentes hardware.", "Un programa de gestión de datos.", "La memoria caché L1."], c:1},
+            {u:"UD5", q:"La fase de FETCH (Búsqueda) consiste en:", o:["Ejecutar la operación en la ALU.", "Traer la instrucción desde la memoria principal al procesador.", "Escribir el resultado en el disco.", "Decodificar el código de operación."], c:1},
+            {u:"UD5", q:"Durante la fase de ejecución, la ALU:", o:["Busca la siguiente instrucción.", "Realiza la operación aritmética o lógica indicada.", "Carga datos del teclado.", "Guarda la instrucción en el CP."], c:1},
+            {u:"UD5", q:"La ruta de datos (datapath) incluye:", o:["Solo los cables externos.", "Los registros, la ALU y los buses internos.", "Únicamente el monitor.", "El sistema operativo."], c:1},
+            {u:"UD5", q:"¿Puede la ALU operar con datos que no estén en registros en una arquitectura Load/Store?", o:["Sí, directamente desde memoria.", "No, los datos deben estar previamente cargados en registros.", "Solo si es una suma.", "Solo en modo kernel."], c:1},
 
             // UD6
-            {u:"UD6", q:"Memoria volátil: Pierde los datos cuando se apaga el sistema.", o:["Cierto", "Falso", "Caché", "Flash"], c:0},
-            {u:"UD6", q:"Fallo de caché: Bloque solicitado no se encuentra en caché.", o:["Cierto", "Falso", "Permanente", "Ya está"], c:0},
-            {u:"UD6", q:"Memoria más rápida y cara:", o:["SRAM", "Flash", "DRAM", "Disco"], c:0},
-            {u:"UD6", q:"Localidad espacial: Si se accede a un dato, se accederá a cercanos.", o:["Temporal", "Cierto", "Aleatorio", "Directo"], c:1},
-            {u:"UD6", q:"Módulo E/S FALSA: Nunca almacena datos.", o:["Es falsa", "Cierto", "Gestiona CPU", "Temporiza"], c:0},
-            {u:"UD6", q:"Tipo de memoria volátil (UD6):", o:["Flash", "ROM", "Discos", "RAM"], c:3},
-            {u:"UD6", q:"Reemplazo aleatorio: Selecciona al azar el bloque.", o:["LRU", "Cierto", "FIFO", "Directo"], c:1},
-            {u:"UD6", q:"Programa: Se ejecutan leyendo las instrucciones de memoria principal.", o:["Del disco", "Cierto", "Compila", "Alto nivel"], c:1},
-            {u:"UD6", q:"Memoria externa, alta capacidad y bajo costo:", o:["Óptica.", "Semiconductores.", "Magnética.", "Flash."], c:2},
-            {u:"UD6", q:"Caché: Almacena temporalmente los datos más usados.", o:["Cierto", "Permanente", "Externa", "Lenta"], c:0}
+            {u:"UD6", q:"La memoria volátil pierde su contenido cuando:", o:["Se llena la capacidad.", "Se desconecta la alimentación eléctrica.", "Se accede a ella muchas veces.", "Se utiliza un antivirus."], c:1},
+            {u:"UD6", q:"Un 'fallo de caché' (cache miss) ocurre cuando:", o:["La memoria RAM está rota.", "El dato solicitado no se encuentra en la memoria caché.", "El procesador va demasiado rápido.", "La caché es más grande que la RAM."], c:1},
+            {u:"UD6", q:"De las siguientes, ¿cuál es la memoria más rápida y costosa por bit?", o:["DRAM.", "SRAM (usada en caché).", "Memoria Flash.", "Disco duro magnético."], c:1},
+            {u:"UD6", q:"El principio de localidad espacial indica que:", o:["Si se accede a un dato, es probable que se acceda a datos en direcciones cercanas próximamente.", "Los datos se borran después de usarlos.", "Solo se puede acceder a la memoria de forma aleatoria.", "La CPU está lejos de la memoria."], c:0},
+            {u:"UD6", q:"Señala la afirmación FALSA sobre los módulos de Entrada/Salida:", o:["Actúan como interfaz entre la CPU y los periféricos.", "Nunca disponen de memoria interna para almacenamiento temporal.", "Se encargan de la detección de errores en la transmisión.", "Gestionan la temporización y el control."], c:1},
+            {u:"UD6", q:"La memoria RAM se clasifica como:", o:["Memoria no volátil.", "Memoria volátil de acceso aleatorio.", "Memoria de solo lectura.", "Almacenamiento secundario."], c:1},
+            {u:"UD6", q:"Reemplazo aleatorio: Selecciona al azar el bloque que va a ser reemplazado de entre todos los bloques que hay en la memoria caché:", o:["Cierto.", "Falso.", "Solo en LRU.", "Solo en FIFO."], c:0},
+            {u:"UD6", q:"Los programas se ejecutan cargando sus instrucciones en:", o:["El disco duro.", "La memoria principal.", "El bus de datos únicamente.", "La unidad de CD-ROM."], c:1},
+            {u:"UD6", q:"¿Qué tipo de almacenamiento ofrece alta capacidad a bajo coste pero es más lento?", o:["Registros de CPU.", "Memoria caché.", "Memoria secundaria (Discos).", "Memoria SRAM."], c:2},
+            {u:"UD6", q:"La memoria caché sirve para:", o:["Aumentar la capacidad total de la RAM.", "Reducir el tiempo medio de acceso a los datos de memoria principal.", "Guardar archivos de forma permanente.", "Enfriar el procesador."], c:1}
         ];
 
         let questions = [];
         let hits = 0, fails = 0, done = 0;
 
-        // Algoritmo Fisher-Yates corregido
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                const temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
+                [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
