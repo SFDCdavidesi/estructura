@@ -3,235 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuestionarios de Autoevaluación UAX</title>
+    <title>Test Completo UAX - 60 Preguntas</title>
     <style>
         :root {
-            --primary-color: #004a99;
-            --success-color: #28a745;
-            --error-color: #dc3545;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
+            --primary: #004a99;
+            --success: #28a745;
+            --error: #dc3545;
+            --bg: #f0f2f5;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--primary-color);
-        }
-
-        .scoreboard {
-            position: sticky;
-            top: 10px;
-            z-index: 100;
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .score-item.correct { color: var(--success-color); }
-        .score-item.wrong { color: var(--error-color); }
-
-        .question-card {
-            background: var(--card-bg);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-
-        .question-text {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .options-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .option-item {
-            padding: 12px;
-            margin: 8px 0;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-item:hover {
-            background-color: #f0f4f8;
-            border-color: var(--primary-color);
-        }
-
-        .option-item.selected-correct {
-            background-color: #d4edda;
-            border-color: var(--success-color);
-            color: #155724;
-        }
-
-        .option-item.selected-wrong {
-            background-color: #f8d7da;
-            border-color: var(--error-color);
-            color: #721c24;
-        }
-
-        .disabled {
-            pointer-events: none;
-            opacity: 0.8;
-        }
-
-        .unit-tag {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .scoreboard { font-size: 1rem; }
-        }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 850px; width: 100%; }
+        .header { text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .stats { position: sticky; top: 10px; z-index: 100; background: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-around; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 20px; font-weight: bold; }
+        .q-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .unit-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.75rem; text-transform: uppercase; }
+        .question-text { margin: 15px 0; font-size: 1.1rem; line-height: 1.4; }
+        .option { padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: #f8f9fa; border-color: var(--primary); }
+        .correct { background: #d4edda !important; border-color: var(--success) !important; color: #155724; }
+        .wrong { background: #f8d7da !important; border-color: var(--error) !important; color: #721c24; }
+        .disabled { pointer-events: none; }
+        #progress-bar { width: 100%; height: 10px; background: #e0e0e0; border-radius: 5px; margin-top: 10px; }
+        #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 5px; transition: 0.3s; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Simulador de Examen UAX</h1>
-        <p>Unidades Didácticas 1 - 6</p>
-    </header>
-
-    <div class="scoreboard">
-        <div class="score-item correct">Aciertos: <span id="correct-count">0</span></div>
-        <div class="score-item">Preguntas: <span id="total-answered">0</span> / <span id="total-questions">0</span></div>
-        <div class="score-item wrong">Fallos: <span id="wrong-count">0</span></div>
+    <div class="header">
+        <h1>Simulador de Examen Completo</h1>
+        <p>Unidades 1 a 6 (60 Preguntas Extraídas)</p>
+        <div id="progress-bar"><div id="progress-fill"></div></div>
     </div>
 
-    <div id="quiz-container">
-        </div>
+    <div class="stats">
+        <span style="color:var(--success)">Aciertos: <span id="hits">0</span></span>
+        <span>Progreso: <span id="current">0</span>/60</span>
+        <span style="color:var(--error)">Fallos: <span id="fails">0</span></span>
+    </div>
+
+    <div id="quiz-box"></div>
 </div>
 
 <script>
-    const questions = [
-        // UD1
-        { unit: "UD1", q: "¿A qué generación pertenecen los transistores?", options: ["Tercera", "Primera", "Cuarta", "Segunda"], correct: 3 },
-        { unit: "UD1", q: "En una memoria:", options: ["Tenemos tantos bits como 2^líneas", "La cantidad total de datos es potencia de 2", "En cada posición hay un dato útil", "El número de posiciones es 2^bits de entrada"], correct: 1 },
-        { unit: "UD1", q: "¿Qué arquitectura recomendarías para un sistema empotrado?", options: ["Macintosh", "Harvard", "Von Neumann", "Windows"], correct: 1 },
-        { unit: "UD1", q: "Es arquitectura Von Neumann si...", options: ["Bus de datos e instrucciones es compartido", "Datos y control comparten bus", "Instrucciones y datos mismo tamaño y bus", "Ancho de palabra != tamaño instrucción"], correct: 0 },
-        { unit: "UD1", q: "Una memoria volátil se caracteriza por:", options: ["Almacenar datos", "Perder información sin flujo eléctrico", "No necesitar energía", "Ninguna"], correct: 1 },
-        { unit: "UD1", q: "El CP (Contador de Programa) apunta a:", options: ["Siguiente instrucción", "Instrucción en curso", "Instrucción previa", "Ninguna"], correct: 0 },
-        { unit: "UD1", q: "El lenguaje máquina es:", options: ["Muy alto nivel", "Bajo nivel", "Alto nivel", "Ninguna"], correct: 1 },
-        
-        // UD2
-        { unit: "UD2", q: "Respecto al reloj de un procesador:", options: ["Difícil comparar arquitecturas distintas", "Más frecuencia siempre es más rápido", "Señal sinusoidal 0-5V", "Más MIPS siempre es más rápido"], correct: 0 },
-        { unit: "UD2", q: "Respecto al CPI:", options: ["A mayor CPI menos MIPS", "Más ciclos es siempre más lento", "Depende de frecuencia", "Todas duran lo mismo"], correct: 0 },
-        { unit: "UD2", q: "Valor MIPS con 2 MHz y 3 instrucciones/ciclo:", options: ["6", "1.5", "No se sabe", "666.6"], correct: 0 },
-        
-        // UD3
-        { unit: "UD3", q: "El lenguaje ensamblador:", options: ["Poco parecido entre CPUs", "Igual que código máquina", "Bajo nivel por cercanía al hardware", "Uso corriente"], correct: 2 },
-        { unit: "UD3", q: "Característica principal de MIPS32:", options: ["Sin aritmética", "Instrucciones complejas", "Conjunto reducido de instrucciones", "CISC"], correct: 2 },
-        { unit: "UD3", q: "Instrucción MIPS32 para sumar registros:", options: ["SUB", "ADD", "DIV", "MUL"], correct: 1 },
-        { unit: "UD3", q: "¿Qué es Little Endian?", options: ["Sin orden", "Aleatorio", "Byte menos significativo primero", "Byte más significativo primero"], correct: 2 },
-        
-        // UD4
-        { unit: "UD4", q: "Procesos con memoria compartida:", options: ["Mismo sistema de ficheros", "Hijos mismo padre", "Padre-hijo", "Mismo usuario"], correct: 0 },
-        { unit: "UD4", q: "En un pipe:", options: ["Solo unidireccional", "No bidireccional", "Sin bloqueos", "No entre máquinas distintas"], correct: 3 },
-        { unit: "UD4", q: "Semaforo general con valor 2:", options: ["Sin procesos en R.C.", "Wait bloquea", "Puede haber procesos en R.C.", "Signal no afecta"], correct: 2 },
-        
-        // UD5
-        { unit: "UD5", q: "Funciones de bibliotecas estáticas:", options: ["Integradas en ejecutables", "Llamada al sistema", "Sin reenlace tras update", "Sin recompilar"], correct: 0 },
-        { unit: "UD5", q: "Las direcciones lógicas son:", options: ["Entrada a la MMU", "Referencias físicas", "Empiezan en 1", "Distintas para cada proceso"], correct: 0 },
-        { unit: "UD5", q: "Particiones dinámicas tienen:", options: ["Fragm. Interna", "Fragm. Externa", "Zonas separadas", "Eficiencia fija"], correct: 1 },
-        
-        // UD6
-        { unit: "UD6", q: "Tercer parámetro de 'open':", options: ["Solo si el archivo no existe", "Privilegios dueño", "Privilegios proceso", "Modo R/W"], correct: 0 },
-        { unit: "UD6", q: "Controlador de dispositivo:", options: ["Hardware nuevo", "Software envía órdenes", "Escribe en registros", "Escribe en memoria principal"], correct: 3 },
-        { unit: "UD6", q: "E/S por interrupciones:", options: ["Solo proceso usuario", "No interrumpible", "Siempre modo núcleo", "Proceso usuario atiende"], correct: 2 }
-    ];
+const questions = [
+    // UD1
+    {u:"UD1", q:"¿A qué generación pertenecen los transistores?", o:["Tercera", "Primera", "Cuarta", "Segunda"], c:3},
+    {u:"UD1", q:"En una memoria:", o:["Tantos bits como 2^líneas", "La cantidad total de datos es potencia de 2", "En cada posición hay un dato útil", "El número de posiciones es 2^bits de entrada"], c:1},
+    {u:"UD1", q:"¿Qué arquitectura recomendarías para un sistema empotrado?", o:["Macintosh", "Harvard", "Von Neumann", "Windows"], c:1},
+    {u:"UD1", q:"Es arquitectura Harvard si...", o:["Las instrucciones pueden tener distinto tamaño que los datos", "Las instrucciones no pueden tener distinto tamaño", "El bus de datos y el de instrucciones son bidireccionales", "Usamos el mismo bus para control que para datos"], c:0},
+    {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Almacenar datos", "Perder información sin flujo eléctrico", "No necesitar energía", "Ninguna"], c:1},
+    {u:"UD1", q:"El CP (Contador de Programa) apunta a:", o:["Siguiente instrucción", "Instrucción en curso", "Instrucción previa", "Ninguna"], c:0},
+    {u:"UD1", q:"El lenguaje máquina es:", o:["Muy alto nivel", "Bajo nivel", "Alto nivel", "Ninguna"], c:1},
+    {u:"UD1", q:"¿Cuál de estos componentes forma parte de la CPU?", o:["Memoria Principal", "Unidad de Control", "Disco Duro", "Monitor"], c:1},
+    {u:"UD1", q:"La unidad mínima de información en un computador es:", o:["Byte", "Bit", "Palabra", "Registro"], c:1},
+    {u:"UD1", q:"La arquitectura Von Neumann se caracteriza por:", o:["Buses separados para datos e instrucciones", "Bus único para datos e instrucciones", "No tener memoria", "No usar CPU"], c:1},
 
-    let correctScore = 0;
-    let wrongScore = 0;
-    let answeredCount = 0;
+    // UD2
+    {u:"UD2", q:"Respecto al reloj de un procesador:", o:["Difícil comparar arquitecturas distintas", "Más frecuencia es siempre más rápido", "Señal sinusoidal 0-5V", "Más MIPS es siempre más rápido"], c:0},
+    {u:"UD2", q:"Respecto al CPI:", o:["A mayor CPI menos MIPS", "Más ciclos es siempre más lento", "Depende de frecuencia", "Todas duran lo mismo"], c:0},
+    {u:"UD2", q:"Valor MIPS con 2 MHz y 3 instrucciones/ciclo:", o:["6", "1.5", "No se sabe", "666.6"], c:0},
+    {u:"UD2", q:"El tiempo de CPU se calcula como:", o:["IC * CPI * Ciclo de Reloj", "IC / CPI", "Frecuencia * IC", "CPI / Frecuencia"], c:0},
+    {u:"UD2", q:"Los MFLOPS miden:", o:["Operaciones de enteros", "Operaciones de coma flotante", "Instrucciones por segundo", "Ciclos por instrucción"], c:1},
+    {u:"UD2", q:"La Ley de Amdahl se refiere a:", o:["Mejora del rendimiento máximo", "Consumo eléctrico", "Tamaño de transistores", "Capacidad de disco"], c:0},
+    {u:"UD2", q:"Un benchmark es:", o:["Un tipo de procesador", "Un programa para medir rendimiento", "Una instrucción MIPS", "Un error de sistema"], c:1},
+    {u:"UD2", q:"Los MIPS como medida de rendimiento:", o:["Son universales", "Dependen del conjunto de instrucciones", "Son mejores que el tiempo de ejecución", "No dependen del hardware"], c:1},
+    {u:"UD2", q:"Los multicomputadores señalan la falsa:", o:["Tienen memoria compartida", "Son sistemas paralelos", "Tienen nodos independientes", "Usan paso de mensajes"], c:0},
+    {u:"UD2", q:"La segmentación (pipelining) mejora:", o:["El tiempo de ejecución de una instrucción", "El throughput (productividad)", "La latencia individual", "El tamaño de la memoria"], c:1},
 
-    const quizContainer = document.getElementById('quiz-container');
-    const correctDisplay = document.getElementById('correct-count');
-    const wrongDisplay = document.getElementById('wrong-count');
-    const totalAnsweredDisplay = document.getElementById('total-answered');
-    const totalQuestionsDisplay = document.getElementById('total-questions');
+    // UD3
+    {u:"UD3", q:"El lenguaje ensamblador:", o:["Poco parecido entre CPUs", "Igual que código máquina", "Bajo nivel por cercanía al hardware", "Uso corriente"], c:2},
+    {u:"UD3", q:"Característica principal de MIPS32:", o:["Sin aritmética", "Instrucciones complejas", "Conjunto reducido de instrucciones", "CISC"], c:2},
+    {u:"UD3", q:"¿Qué es Little Endian?", o:["Sin orden", "Aleatorio", "Byte menos significativo primero", "Byte más significativo primero"], c:2},
+    {u:"UD3", q:"En MIPS32, el registro $zero:", o:["Es para guardar ceros", "Siempre vale 0 y no cambia", "Es un contador", "Es para errores"], c:1},
+    {u:"UD3", q:"La instrucción 'lw' sirve para:", o:["Escribir en memoria", "Cargar desde memoria a registro", "Sumar", "Saltar"], c:1},
+    {u:"UD3", q:"Una pseudoinstrucción es:", o:["Un error", "Traducida por el ensamblador a varias reales", "Solo para el programador", "No existe en MIPS"], c:1},
+    {u:"UD3", q:"El modo Kernel es:", o:["Modo de bajos privilegios", "Modo con más permisos sobre hardware", "Para juegos", "Un lenguaje"], c:1},
+    {u:"UD3", q:"Los registros de propósito general en MIPS son:", o:["16", "64", "32", "8"], c:2},
+    {u:"UD3", q:"La instrucción 'beq' se usa para:", o:["Sumar", "Saltos condicionales", "Cargar datos", "Finalizar"], c:1},
+    {u:"UD3", q:"En ensamblador, una etiqueta (label) sirve para:", o:["Definir variables", "Identificar posiciones de memoria/salto", "Comentar código", "Aumentar velocidad"], c:1},
 
-    function initQuiz() {
-        totalQuestionsDisplay.innerText = questions.length;
-        questions.forEach((data, index) => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            card.innerHTML = `
-                <span class="unit-tag">${data.unit}</span>
-                <div class="question-text">${index + 1}. ${data.q}</div>
-                <ul class="options-list" id="q${index}-options">
-                    ${data.options.map((opt, i) => `
-                        <li class="option-item" onclick="checkAnswer(${index}, ${i})">${opt}</li>
-                    `).join('')}
-                </ul>
-            `;
-            quizContainer.appendChild(card);
-        });
+    // UD4
+    {u:"UD4", q:"Dos procesos con memoria compartida:", o:["Mismo sistema de ficheros", "Hijos mismo padre", "Padre-hijo", "Mismo usuario"], c:0},
+    {u:"UD4", q:"En un pipe:", o:["Solo unidireccional", "No bidireccional", "Sin bloqueos", "No entre máquinas distintas"], c:3},
+    {u:"UD4", q:"Semaforo general con valor 2:", o:["Sin procesos en R.C.", "Wait bloquea", "Puede haber procesos en R.C.", "Signal no afecta"], c:2},
+    {u:"UD4", q:"Un recurso crítico debe accederse:", o:["Simultáneamente", "En exclusión mutua dentro de R.C.", "Sin bloqueos", "Solo por el Kernel"], c:1},
+    {u:"UD4", q:"La función 'fork()' sirve para:", o:["Terminar un proceso", "Crear un nuevo proceso hijo", "Leer un fichero", "Esperar un semáforo"], c:1},
+    {u:"UD4", q:"Un Deadlock (Interbloqueo) ocurre cuando:", o:["Un proceso va rápido", "Procesos se bloquean mutuamente esperando recursos", "Falla el disco", "Se acaba la batería"], c:1},
+    {u:"UD4", q:"Los hilos (threads) a diferencia de procesos:", o:["No comparten memoria", "Comparten el espacio de direcciones", "Son más pesados", "No necesitan CPU"], c:1},
+    {u:"UD4", q:"La primitiva 'wait' en semáforos:", o:["Incrementa el valor", "Decrementa y puede bloquear", "No hace nada", "Reinicia el sistema"], c:1},
+    {u:"UD4", q:"Comunicación asíncrona significa:", o:["El emisor espera al receptor", "El emisor no espera al receptor", "Van a la misma velocidad", "No hay emisor"], c:1},
+    {u:"UD4", q:"Un mutex es:", o:["Un semáforo binario para exclusión mutua", "Un tipo de memoria", "Un error de bus", "Una instrucción de suma"], c:0},
+
+    // UD5
+    {u:"UD5", q:"Bibliotecas estáticas:", o:["Integradas en ejecutables", "Llamada al sistema", "Sin reenlace tras update", "Sin recompilar"], c:0},
+    {u:"UD5", q:"Las direcciones lógicas son:", o:["Entrada a la MMU", "Referencias físicas", "Empiezan en 1", "Distintas para cada proceso"], c:0},
+    {u:"UD5", q:"Particiones dinámicas tienen:", o:["Fragm. Interna", "Fragm. Externa", "Zonas separadas", "Eficiencia fija"], c:1},
+    {u:"UD5", q:"La MMU sirve para:", o:["Sumar números", "Traducir direcciones lógicas a físicas", "Controlar el ratón", "Gestionar el reloj"], c:1},
+    {u:"UD5", q:"En paginación, la fragmentación es:", o:["Externa", "Interna (en la última página)", "No existe", "Total"], c:1},
+    {u:"UD5", q:"El 'Swapping' consiste en:", o:["Cambiar el teclado", "Mover procesos entre memoria principal y disco", "Sumar registros", "Borrar el kernel"], c:1},
+    {u:"UD5", q:"Memoria Virtual permite:", o:["Ejecutar procesos más grandes que la RAM física", "Tener más discos", "Aumentar la frecuencia de reloj", "No usar RAM"], c:0},
+    {u:"UD5", q:"Un 'Page Fault' (Fallo de página) ocurre cuando:", o:["La RAM está rota", "La página no está en memoria principal", "El proceso termina", "Se escribe mal"], c:1},
+    {u:"UD5", q:"El algoritmo LRU para reemplazo de páginas:", o:["Sustituye la más nueva", "Sustituye la menos usada recientemente", "Sustituye al azar", "No existe"], c:1},
+    {u:"UD5", q:"La segmentación de memoria divide el proceso en:", o:["Bloques de tamaño fijo", "Bloques lógicos de tamaño variable", "Bits sueltos", "No lo divide"], c:1},
+
+    // UD6
+    {u:"UD6", q:"Tercer parámetro de 'open':", o:["Solo si el archivo no existe", "Privilegios dueño", "Privilegios proceso", "Modo R/W"], c:0},
+    {u:"UD6", q:"Controlador de dispositivo:", o:["Hardware nuevo", "Software envía órdenes", "Escribe en registros", "Escribe en memoria principal"], c:3},
+    {u:"UD6", q:"E/S por interrupciones:", o:["Solo proceso usuario", "No interrumpible", "Siempre modo núcleo", "Proceso usuario atiende"], c:2},
+    {u:"UD6", q:"Un inodo en sistemas de ficheros contiene:", o:["El nombre del archivo", "Metadatos y punteros a bloques de datos", "El contenido del texto", "La contraseña del usuario"], c:1},
+    {u:"UD6", q:"La llamada 'lseek' sirve para:", o:["Borrar un archivo", "Mover el puntero de lectura/escritura", "Crear un directorio", "Listar archivos"], c:1},
+    {u:"UD6", q:"En E/S por DMA:", o:["La CPU mueve cada byte", "El controlador mueve bloques a memoria sin CPU", "No se usa memoria", "Es más lento que por programa"], c:1},
+    {u:"UD6", q:"Un enlace simbólico (soft link):", o:["Es una copia del archivo", "Es un puntero al nombre de otro archivo", "Tiene el mismo inodo", "No se puede borrar"], c:1},
+    {u:"UD6", q:"El RAID 0 se utiliza para:", o:["Redundancia total", "Mejorar rendimiento (striping)", "Seguridad de datos", "No existe"], c:1},
+    {u:"UD6", q:"La técnica de 'Spooling' se usa habitualmente en:", o:["Ratones", "Impresoras", "Teclados", "Altavoces"], c:1},
+    {u:"UD6", q:"Un sistema de archivos Journaling:", o:["Es más lento", "Permite recuperación tras fallos mediante un registro", "No usa inodos", "Es solo para Windows"], c:1}
+];
+
+let hits = 0, fails = 0, done = 0;
+
+function render() {
+    const box = document.getElementById('quiz-box');
+    questions.forEach((data, i) => {
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `
+            <span class="unit-badge">${data.u}</span>
+            <div class="question-text"><strong>${i+1}.</strong> ${data.q}</div>
+            <div id="opts-${i}">
+                ${data.o.map((opt, oi) => `<div class="option" onclick="check(${i}, ${oi})">${opt}</div>`).join('')}
+            </div>
+        `;
+        box.appendChild(card);
+    });
+}
+
+window.check = (qi, oi) => {
+    const container = document.getElementById(`opts-${qi}`);
+    if(container.classList.contains('disabled')) return;
+    
+    const options = container.querySelectorAll('.option');
+    const correct = questions[qi].c;
+    
+    if(oi === correct) {
+        options[oi].classList.add('correct');
+        hits++;
+    } else {
+        options[oi].classList.add('wrong');
+        options[correct].classList.add('correct');
+        fails++;
     }
+    
+    done++;
+    container.classList.add('disabled');
+    document.getElementById('hits').innerText = hits;
+    document.getElementById('fails').innerText = fails;
+    document.getElementById('current').innerText = done;
+    document.getElementById('progress-fill').style.width = `${(done/60)*100}%`;
+};
 
-    window.checkAnswer = function(qIndex, selectedIndex) {
-        const optionsList = document.getElementById(`q${qIndex}-options`);
-        if (optionsList.classList.contains('disabled')) return;
-
-        const items = optionsList.getElementsByTagName('li');
-        const isCorrect = selectedIndex === questions[qIndex].correct;
-
-        if (isCorrect) {
-            items[selectedIndex].classList.add('selected-correct');
-            correctScore++;
-        } else {
-            items[selectedIndex].classList.add('selected-wrong');
-            items[questions[qIndex].correct].classList.add('selected-correct');
-            wrongScore++;
-        }
-
-        answeredCount++;
-        optionsList.classList.add('disabled');
-        updateScore();
-    }
-
-    function updateScore() {
-        correctDisplay.innerText = correctScore;
-        wrongDisplay.innerText = wrongScore;
-        totalAnsweredDisplay.innerText = answeredCount;
-    }
-
-    initQuiz();
+render();
 </script>
-
 </body>
 </html>
