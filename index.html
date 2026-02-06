@@ -50,7 +50,7 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
@@ -58,10 +58,8 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: background 0.2s;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
         }
-
-        .shuffle-btn:active { background: #1d4ed8; }
 
         .quiz-container { width: 100%; max-width: 500px; }
 
@@ -97,6 +95,7 @@
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s;
+            background: #fdfdfd;
         }
 
         .disabled { pointer-events: none; }
@@ -133,27 +132,27 @@
     <div class="header">
         <div class="stat"><span class="stat-val" id="hits">0</span><span class="stat-label">Aciertos</span></div>
         <div class="stat"><span class="stat-val" id="fails">0</span><span class="stat-label">Fallos</span></div>
-        <div class="stat"><span class="stat-val" id="current">0</span><span class="stat-label">Total</span></div>
-        <button class="shuffle-btn" onclick="initQuiz()">🎲 Mezclar Preguntas</button>
+        <div class="stat"><span class="stat-val" id="current">0/60</span><span class="stat-label">Progreso</span></div>
+        <button class="shuffle-btn" onclick="initQuiz()">🎲 Mezclar y Reiniciar</button>
     </div>
 
     <div class="quiz-container" id="quiz-box"></div>
 
     <div class="overlay" id="overlay"></div>
     <div id="results-modal">
-        <h2>🎉 ¡Cuestionario Finalizado!</h2>
-        <p id="final-stats"></p>
-        <button class="shuffle-btn" onclick="location.reload()">Reintentar</button>
+        <h2>🎉 ¡Fin del Test!</h2>
+        <div id="final-stats" style="margin: 20px 0; line-height: 2;"></div>
+        <button class="shuffle-btn" onclick="initQuiz(); document.getElementById('results-modal').style.display='none'; document.getElementById('overlay').style.display='none';">🔄 Volver a intentar</button>
     </div>
 
     <script>
         const rawQuestions = [
             // UD1
             {u:"UD1", q:"Los transistores pertenecen a la generación de computadores...", o:["Tercera.", "Primera.", "Cuarta.", "Segunda."], c:3},
-            {u:"UD1", q:"En una memoria:", o:["Tantos bits almacenados como 2^líneas.", "La cantidad total de datos almacenada es potencia de 2.", "En cada posición de memoria hay un dato útil.", "Número de posiciones es 2^bits de entrada."], c:1},
-            {u:"UD1", q:"Para un sistema empotrado, ¿qué arquitectura recomendarías utilizar?", o:["Un Macintosh.", "Harvard.", "Von Neumann.", "Un servidor Windows."], c:1},
+            {u:"UD1", q:"En una memoria (UD1):", o:["Tantos bits almacenados como 2^líneas.", "La cantidad total de datos almacenada es potencia de 2.", "En cada posición de memoria hay almacenado un dato útil.", "Número de posiciones es 2^bits de entrada."], c:1},
+            {u:"UD1", q:"Como estudiantes recién graduados... nos piden diseñar una computadora para un sistema empotrado, ¿qué arquitectura recomendarías?", o:["Un Macintosh.", "Harvard.", "Von Neumann.", "Un servidor Windows."], c:1},
             {u:"UD1", q:"Respecto a la arquitectura: Es von Neumann si el bus de datos y el de instrucciones es compartido.", o:["Verdadero", "Es Harvard si comparten bus.", "Falso", "Ninguna."], c:0},
-            {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Almacenar datos.", "Se pierde la información si se interrumpe el flujo eléctrico.", "No necesita energía.", "Ninguna."], c:1},
+            {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Parte del computador donde se almacenan datos.", "Se pierde la información si se interrumpe el flujo eléctrico.", "No necesita energía.", "Ninguna."], c:1},
             {u:"UD1", q:"El registro de instrucción...", o:["Contiene valores de ejecución.", "Ninguna de las otras respuestas.", "Siguiente instrucción en ensamblador.", "Actual instrucción en ensamblador."], c:1},
             {u:"UD1", q:"Es Harvard si las instrucciones pueden tener distinto tamaño que los datos.", o:["Verdadero", "Falso", "Solo en Von Neumann", "Ninguna."], c:0},
             {u:"UD1", q:"El CP (contador de programa), ¿a dónde apunta?", o:["A la siguiente instrucción.", "A la instrucción en curso.", "A la instrucción previa.", "Ninguna."], c:0},
@@ -204,7 +203,7 @@
             {u:"UD5", q:"Un ciclo de 1 ns es 1 G de frecuencia.", o:["Cierto", "Falso", "2 G", "10 G"], c:0},
             {u:"UD5", q:"Bus: Líneas de transmisión que permiten comunicación hardware.", o:["Disco", "Cierto", "RAM", "E/S"], c:1},
             {u:"UD5", q:"FETCH: Se busca la instrucción en la memoria principal.", o:["Ejecuta", "Cierto", "Decodifica", "Almacena"], c:1},
-            {u:"UD5", q:"Fase Fetch: Carga datos de memoria.", o:["Cierto", "Hacia memoria", "No memoria", "Solo registros"], c:0},
+            {u:"UD5", q:"Fase Fetch (UD5): Carga datos de memoria.", o:["Cierto", "Hacia memoria", "No memoria", "Solo registros"], c:0},
             {u:"UD5", q:"Ruta de datos: Contiene registros.", o:["Falso", "Moore", "Cierto", "Solo cables"], c:2},
             {u:"UD5", q:"ALU: Solamente opera con registros.", o:["Con memoria", "Cierto", "Pone a cero", "Directo a disco"], c:1},
 
@@ -214,21 +213,20 @@
             {u:"UD6", q:"Memoria más rápida y cara:", o:["SRAM", "Flash", "DRAM", "Disco"], c:0},
             {u:"UD6", q:"Localidad espacial: Si se accede a un dato, se accederá a cercanos.", o:["Temporal", "Cierto", "Aleatorio", "Directo"], c:1},
             {u:"UD6", q:"Módulo E/S FALSA: Nunca almacena datos.", o:["Es falsa", "Cierto", "Gestiona CPU", "Temporiza"], c:0},
-            {u:"UD6", q:"Tipo de memoria volátil:", o:["Flash", "ROM", "Discos", "RAM"], c:3},
+            {u:"UD6", q:"Tipo de memoria volátil (UD6):", o:["Flash", "ROM", "Discos", "RAM"], c:3},
             {u:"UD6", q:"Reemplazo aleatorio: Selecciona al azar el bloque.", o:["LRU", "Cierto", "FIFO", "Directo"], c:1},
             {u:"UD6", q:"Programa: Se ejecutan leyendo las instrucciones de memoria principal.", o:["Del disco", "Cierto", "Compila", "Alto nivel"], c:1},
-            {u:"UD6", q:"Memoria externa, alta capacidad y bajo costo:", o:["Óptica", "Semiconductores", "Magnética", "Flash"], c:2},
+            {u:"UD6", q:"Memoria externa, alta capacidad y bajo costo:", o:["Óptica.", "Semiconductores.", "Magnética.", "Flash."], c:2},
             {u:"UD6", q:"Caché: Almacena temporalmente los datos más usados.", o:["Cierto", "Permanente", "Externa", "Lenta"], c:0}
         ];
 
         let questions = [];
         let hits = 0, fails = 0, done = 0;
 
+        // Algoritmo Fisher-Yates corregido
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[array[i]]]; // Error intencional en swap para forzar corrección manual
-                // Corrección del swap real:
                 const temp = array[i];
                 array[i] = array[j];
                 array[j] = temp;
@@ -236,12 +234,12 @@
         }
 
         function initQuiz() {
-            questions = [...rawQuestions];
+            questions = JSON.parse(JSON.stringify(rawQuestions));
             shuffle(questions);
             hits = 0; fails = 0; done = 0;
             updateStats();
             render();
-            window.scrollTo(0,0);
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function updateStats() {
@@ -258,8 +256,8 @@
                 card.className = 'q-card';
                 card.innerHTML = `
                     <span class="unit-badge">${data.u}</span>
-                    <div class="question-text">${data.q}</div>
-                    <div id="opts-${i}">
+                    <div class="question-text"><strong>${i+1}.</strong> ${data.q}</div>
+                    <div class="options-container" id="opts-${i}">
                         ${data.o.map((opt, oi) => `<div class="option" onclick="check(${i}, ${oi})">${opt}</div>`).join('')}
                     </div>
                 `;
@@ -291,12 +289,13 @@
         };
 
         function showFinalResults() {
-            const percent = ((hits / questions.length) * 100).toFixed(1);
+            const grade = ((hits / questions.length) * 10).toFixed(2);
             document.getElementById('final-stats').innerHTML = `
-                Aciertos: ${hits}<br>
-                Fallos: ${fails}<br>
-                Nota: <strong>${(hits/6).toFixed(2)} / 10</strong><br>
-                Porcentaje: ${percent}%
+                <div style="font-size: 1.1rem">
+                    Aciertos: <span style="color:var(--success)">${hits}</span><br>
+                    Fallos: <span style="color:var(--error)">${fails}</span><br>
+                    Nota Final: <span style="font-size:2rem; font-weight:bold">${grade} / 10</span>
+                </div>
             `;
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('results-modal').style.display = 'block';
