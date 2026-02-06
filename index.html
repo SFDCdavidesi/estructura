@@ -3,166 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Completo UAX - 60 Preguntas</title>
+    <title>Simulador Autoevaluación EC - UAX</title>
     <style>
         :root {
-            --primary: #004a99;
-            --success: #28a745;
-            --error: #dc3545;
-            --bg: #f0f2f5;
+            --primary: #2563eb;
+            --success: #059669;
+            --error: #dc2626;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
         }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 850px; width: 100%; }
-        .header { text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .stats { position: sticky; top: 10px; z-index: 100; background: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-around; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 20px; font-weight: bold; }
-        .q-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .unit-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.75rem; text-transform: uppercase; }
-        .question-text { margin: 15px 0; font-size: 1.1rem; line-height: 1.4; }
-        .option { padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .option:hover { background: #f8f9fa; border-color: var(--primary); }
-        .correct { background: #d4edda !important; border-color: var(--success) !important; color: #155724; }
-        .wrong { background: #f8d7da !important; border-color: var(--error) !important; color: #721c24; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 0 0 12px 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat { text-align: center; }
+        .stat-val { display: block; font-weight: bold; font-size: 1.2rem; }
+        .stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .q-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .unit-badge {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
+            font-size: 0.95rem;
+        }
+
+        .option:active { transform: scale(0.98); }
+
         .disabled { pointer-events: none; }
-        #progress-bar { width: 100%; height: 10px; background: #e0e0e0; border-radius: 5px; margin-top: 10px; }
-        #progress-fill { height: 100%; background: var(--primary); width: 0%; border-radius: 5px; transition: 0.3s; }
+
+        .correct {
+            background-color: #dcfce7 !important;
+            border-color: var(--success) !important;
+            color: #064e3b !important;
+        }
+
+        .wrong {
+            background-color: #fee2e2 !important;
+            border-color: var(--error) !important;
+            color: #7f1d1d !important;
+        }
+
+        pre {
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
     <div class="header">
-        <h1>Simulador de Examen Completo</h1>
-        <p>Unidades 1 a 6 (60 Preguntas Extraídas)</p>
-        <div id="progress-bar"><div id="progress-fill"></div></div>
+        <div class="stat">
+            <span class="stat-val" id="hits">0</span>
+            <span class="stat-label">Aciertos</span>
+        </div>
+        <div class="stat">
+            <span class="stat-val" id="fails">0</span>
+            <span class="stat-label">Fallos</span>
+        </div>
+        <div class="stat">
+            <span class="stat-val" id="current">0</span>
+            <span class="stat-label">Progreso</span>
+        </div>
     </div>
 
-    <div class="stats">
-        <span style="color:var(--success)">Aciertos: <span id="hits">0</span></span>
-        <span>Progreso: <span id="current">0</span>/60</span>
-        <span style="color:var(--error)">Fallos: <span id="fails">0</span></span>
-    </div>
+    <div class="quiz-container" id="quiz-box"></div>
 
-    <div id="quiz-box"></div>
-</div>
+    <script>
+        const questions = [
+            // UD1
+            {u:"UD1", q:"Los transistores pertenecen a la generación de computadores...", o:["Tercera.", "Primera.", "Cuarta.", "Segunda."], c:3},
+            {u:"UD1", q:"En una memoria:", o:["Tantos bits almacenados como 2^líneas.", "La cantidad total de datos almacenada es potencia de 2.", "En cada posición hay un dato útil.", "Número de posiciones es 2^bits de entrada."], c:1},
+            {u:"UD1", q:"Para un sistema empotrado, ¿qué arquitectura recomendarías?", o:["Macintosh.", "Harvard.", "Von Neumann.", "Servidor Windows."], c:1},
+            {u:"UD1", q:"Respecto a la arquitectura: Es von Neumann si...", o:["El bus de datos y el de instrucciones es compartido.", "Datos y control comparten bus.", "Instrucciones tienen mismo tamaño que datos.", "Ancho de palabra no es igual a instrucción."], c:0},
+            {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Almacenar datos.", "Perder la información si se interrumpe el flujo eléctrico.", "No necesitar energía.", "Ninguna."], c:1},
+            {u:"UD1", q:"El registro de instrucción...", o:["Contiene valores de ejecución.", "Ninguna de las otras respuestas.", "Siguiente instrucción en ensamblador.", "Actual instrucción en ensamblador."], c:1},
+            {u:"UD1", q:"Arquitectura Harvard es si...", o:["Las instrucciones pueden tener distinto tamaño que los datos.", "Instrucciones no pueden tener distinto tamaño.", "Bus de datos e instrucciones bidireccionales.", "Mismo bus para control que datos."], c:0},
+            {u:"UD1", q:"El CP (contador de programa), ¿a dónde apunta?", o:["A la siguiente instrucción.", "A la instrucción en curso.", "A la instrucción previa.", "Ninguna."], c:0},
+            {u:"UD1", q:"El lenguaje máquina...", o:["Ninguna.", "Bajo nivel.", "Muy alto nivel.", "Alto nivel."], c:1},
+            {u:"UD1", q:"La primera generación usó:", o:["Circuitos integrados.", "Tubos al vacío.", "Transistores.", "Chips."], c:1},
 
-<script>
-const questions = [
-    // UD1
-    {u:"UD1", q:"¿A qué generación pertenecen los transistores?", o:["Tercera", "Primera", "Cuarta", "Segunda"], c:3},
-    {u:"UD1", q:"En una memoria:", o:["Tantos bits como 2^líneas", "La cantidad total de datos es potencia de 2", "En cada posición hay un dato útil", "El número de posiciones es 2^bits de entrada"], c:1},
-    {u:"UD1", q:"¿Qué arquitectura recomendarías para un sistema empotrado?", o:["Macintosh", "Harvard", "Von Neumann", "Windows"], c:1},
-    {u:"UD1", q:"Es arquitectura Harvard si...", o:["Las instrucciones pueden tener distinto tamaño que los datos", "Las instrucciones no pueden tener distinto tamaño", "El bus de datos y el de instrucciones son bidireccionales", "Usamos el mismo bus para control que para datos"], c:0},
-    {u:"UD1", q:"Una memoria volátil se caracteriza por:", o:["Almacenar datos", "Perder información sin flujo eléctrico", "No necesitar energía", "Ninguna"], c:1},
-    {u:"UD1", q:"El CP (Contador de Programa) apunta a:", o:["Siguiente instrucción", "Instrucción en curso", "Instrucción previa", "Ninguna"], c:0},
-    {u:"UD1", q:"El lenguaje máquina es:", o:["Muy alto nivel", "Bajo nivel", "Alto nivel", "Ninguna"], c:1},
-    {u:"UD1", q:"¿Cuál de estos componentes forma parte de la CPU?", o:["Memoria Principal", "Unidad de Control", "Disco Duro", "Monitor"], c:1},
-    {u:"UD1", q:"La unidad mínima de información en un computador es:", o:["Byte", "Bit", "Palabra", "Registro"], c:1},
-    {u:"UD1", q:"La arquitectura Von Neumann se caracteriza por:", o:["Buses separados para datos e instrucciones", "Bus único para datos e instrucciones", "No tener memoria", "No usar CPU"], c:1},
+            // UD2
+            {u:"UD2", q:"Sobre el reloj: Es difícil comparar...", o:["Dos procesadores de arquitecturas distintas.", "Frecuencia más alta es siempre más rápido.", "Señal sinusoidal 0-5V.", "Más MIPS es siempre más rápido."], c:0},
+            {u:"UD2", q:"Respecto al CPI:", o:["A mayor CPI menos MIPS.", "Más ciclos es siempre más lento.", "Depende de frecuencia.", "Todas duran lo mismo."], c:0},
+            {u:"UD2", q:"MIPS con 2 MHz y 3 instrucciones/ciclo:", o:["6.", "3/2.", "No se sabe.", "2000/3."], c:0},
+            {u:"UD2", q:"Señala la FALSA:", o:["MIPS dependen de frecuencia.", "MIPS son millones de instr/seg.", "Velocidad de reloj permite comparar arquitecturas.", "Promediar ciclos para CPI medio."], c:2},
+            {u:"UD2", q:"Señala la verdadera:", o:["Paralelismo antes de ejecución.", "Superescalares compatibles con escalares.", "Superescalar grado m tiene CPI m.", "Superescalares en tareas intensivas de cálculo."], c:3},
+            {u:"UD2", q:"Un ciclo de 1 ns son:", o:["10 G.", "1 G.", "No se sabe.", "2 G."], c:1},
+            {u:"UD2", q:"Sobre CPI: No aporta nada sobre...", o:["Subida con menos frecuencia.", "Subida con más frecuencia.", "Rapidez de ejecución de programas.", "Dependencia del programa."], c:2},
+            {u:"UD2", q:"Los MFLOPS:", o:["Parámetro universal.", "Más MFLOPS es siempre más rápido.", "Están relacionados con el CPI.", "Miden todo tipo de operaciones."], c:2},
+            {u:"UD2", q:"Señala la FALSA: Los multicomputadores...", o:["Tienen memoria compartida.", "Trabajan sobre vectores.", "Ahorran bucles.", "Requieren gran ancho de banda."], c:0},
+            {u:"UD2", q:"Dependencias en segmentación:", o:["Se soluciona con instrucciones NOP.", "Solo hardware.", "Solo software.", "Reordenar soluciona siempre."], c:0},
 
-    // UD2
-    {u:"UD2", q:"Respecto al reloj de un procesador:", o:["Difícil comparar arquitecturas distintas", "Más frecuencia es siempre más rápido", "Señal sinusoidal 0-5V", "Más MIPS es siempre más rápido"], c:0},
-    {u:"UD2", q:"Respecto al CPI:", o:["A mayor CPI menos MIPS", "Más ciclos es siempre más lento", "Depende de frecuencia", "Todas duran lo mismo"], c:0},
-    {u:"UD2", q:"Valor MIPS con 2 MHz y 3 instrucciones/ciclo:", o:["6", "1.5", "No se sabe", "666.6"], c:0},
-    {u:"UD2", q:"El tiempo de CPU se calcula como:", o:["IC * CPI * Ciclo de Reloj", "IC / CPI", "Frecuencia * IC", "CPI / Frecuencia"], c:0},
-    {u:"UD2", q:"Los MFLOPS miden:", o:["Operaciones de enteros", "Operaciones de coma flotante", "Instrucciones por segundo", "Ciclos por instrucción"], c:1},
-    {u:"UD2", q:"La Ley de Amdahl se refiere a:", o:["Mejora del rendimiento máximo", "Consumo eléctrico", "Tamaño de transistores", "Capacidad de disco"], c:0},
-    {u:"UD2", q:"Un benchmark es:", o:["Un tipo de procesador", "Un programa para medir rendimiento", "Una instrucción MIPS", "Un error de sistema"], c:1},
-    {u:"UD2", q:"Los MIPS como medida de rendimiento:", o:["Son universales", "Dependen del conjunto de instrucciones", "Son mejores que el tiempo de ejecución", "No dependen del hardware"], c:1},
-    {u:"UD2", q:"Los multicomputadores señalan la falsa:", o:["Tienen memoria compartida", "Son sistemas paralelos", "Tienen nodos independientes", "Usan paso de mensajes"], c:0},
-    {u:"UD2", q:"La segmentación (pipelining) mejora:", o:["El tiempo de ejecución de una instrucción", "El throughput (productividad)", "La latencia individual", "El tamaño de la memoria"], c:1},
+            // UD3
+            {u:"UD3", q:"Lenguaje ensamblador:", o:["Poco parecido entre procesadores.", "Igual a código máquina.", "Bajo nivel por cercanía al hardware.", "Uso corriente."], c:2},
+            {u:"UD3", q:"Característica MIPS32:", o:["Sin aritmética.", "Juego complejo.", "Conjunto reducido de instrucciones.", "CISC."], c:2},
+            {u:"UD3", q:"Sumar dos registros en MIPS32:", o:["SUB", "ADD", "DIV", "MUL"], c:1},
+            {u:"UD3", q:"Registro base + desplazamiento es:", o:["Inmediato.", "Directo a registro.", "Implícito.", "Indirecto a registro con desplazamiento."], c:3},
+            {u:"UD3", q:"Señala la verdadera: Código máquina en memoria...", o:["Trabaja en ensamblador.", "Procesador lo ejecuta sin compilador.", "Da código alto nivel.", "Se escribe en máquina."], c:1},
+            {u:"UD3", q:"Little Endian:", o:["Sin orden.", "Aleatorio.", "Byte menos significativo en 1ª posición.", "Byte más significativo en 1ª posición."], c:2},
+            {u:"UD3", q:"Verdadera MIPS32:", o:["CISC", "Periféricos como registros.", "Arquitectura carga/almacenamiento.", "Cualquier modo."], c:2},
+            {u:"UD3", q:"Pseudoinstrucción MIPS32:", o:["Correspondencia directa máquina.", "Modo kernel.", "Ensamblador traduce a una o más máquina.", "Sin binario."], c:2},
+            {u:"UD3", q:"Ensamblador: Muy parecido entre procesadores...", o:["Sin eficiencia.", "Aunque depende de arquitectura.", "Fácil de programar.", "Sin preocuparse arquitectura."], c:1},
+            {u:"UD3", q:"Procesador MIPS32: Modo kernel es...", o:["Sin registros para sumar.", "Ancho 2 bytes.", "Más permisos sobre hardware.", "Códigos complejos."], c:2},
 
-    // UD3
-    {u:"UD3", q:"El lenguaje ensamblador:", o:["Poco parecido entre CPUs", "Igual que código máquina", "Bajo nivel por cercanía al hardware", "Uso corriente"], c:2},
-    {u:"UD3", q:"Característica principal de MIPS32:", o:["Sin aritmética", "Instrucciones complejas", "Conjunto reducido de instrucciones", "CISC"], c:2},
-    {u:"UD3", q:"¿Qué es Little Endian?", o:["Sin orden", "Aleatorio", "Byte menos significativo primero", "Byte más significativo primero"], c:2},
-    {u:"UD3", q:"En MIPS32, el registro $zero:", o:["Es para guardar ceros", "Siempre vale 0 y no cambia", "Es un contador", "Es para errores"], c:1},
-    {u:"UD3", q:"La instrucción 'lw' sirve para:", o:["Escribir en memoria", "Cargar desde memoria a registro", "Sumar", "Saltar"], c:1},
-    {u:"UD3", q:"Una pseudoinstrucción es:", o:["Un error", "Traducida por el ensamblador a varias reales", "Solo para el programador", "No existe en MIPS"], c:1},
-    {u:"UD3", q:"El modo Kernel es:", o:["Modo de bajos privilegios", "Modo con más permisos sobre hardware", "Para juegos", "Un lenguaje"], c:1},
-    {u:"UD3", q:"Los registros de propósito general en MIPS son:", o:["16", "64", "32", "8"], c:2},
-    {u:"UD3", q:"La instrucción 'beq' se usa para:", o:["Sumar", "Saltos condicionales", "Cargar datos", "Finalizar"], c:1},
-    {u:"UD3", q:"En ensamblador, una etiqueta (label) sirve para:", o:["Definir variables", "Identificar posiciones de memoria/salto", "Comentar código", "Aumentar velocidad"], c:1},
+            // UD4
+            {u:"UD4", q:"¿Qué hace 'mul $t2, $t0, $t1'?", o:["Multiplica a y b en c.", "Suma a y b.", "Divide a por b.", "Resta b de a."], c:0},
+            {u:"UD4", q:"Instrucción 'lb' en MIPS32:", o:["Almacena byte.", "Carga palabra.", "Carga byte extendiendo signo.", "Almacena palabra."], c:2},
+            {u:"UD4", q:"¿Qué hace 'sub $t2, $t0, $t1'?", o:["Divide.", "Resta b de a en c.", "Multiplica.", "Suma."], c:1},
+            {u:"UD4", q:"Cargar byte con ceros (sin signo):", o:["lbu", "lw", "lb", "sb"], c:0},
+            {u:"UD4", q:"beq/bne con equal: li $t2, 1:", o:["0 si iguales.", "Suma x e y.", "1 si iguales, sino 0.", "Resta."], c:2},
+            {u:"UD4", q:"Cargar palabra desde memoria:", o:["lb", "sb", "sw", "lw"], c:3},
+            {u:"UD4", q:"Cargar valor inmediato:", o:["sw", "sb", "li", "lw"], c:2},
+            {u:"UD4", q:"Formato instrucciones MIPS32:", o:["Variable 8-32.", "Variable 16-64.", "Fijo 64.", "Fijo 32 bits."], c:3},
+            {u:"UD4", q:"Almacenar byte registro -> memoria:", o:["sw", "sb", "lb", "lw"], c:1},
+            {u:"UD4", q:"'div' y 'mfhi $t2' hace:", o:["Suma.", "Divide y almacena residuo.", "Cociente.", "Resta."], c:1},
 
-    // UD4
-    {u:"UD4", q:"Dos procesos con memoria compartida:", o:["Mismo sistema de ficheros", "Hijos mismo padre", "Padre-hijo", "Mismo usuario"], c:0},
-    {u:"UD4", q:"En un pipe:", o:["Solo unidireccional", "No bidireccional", "Sin bloqueos", "No entre máquinas distintas"], c:3},
-    {u:"UD4", q:"Semaforo general con valor 2:", o:["Sin procesos en R.C.", "Wait bloquea", "Puede haber procesos en R.C.", "Signal no afecta"], c:2},
-    {u:"UD4", q:"Un recurso crítico debe accederse:", o:["Simultáneamente", "En exclusión mutua dentro de R.C.", "Sin bloqueos", "Solo por el Kernel"], c:1},
-    {u:"UD4", q:"La función 'fork()' sirve para:", o:["Terminar un proceso", "Crear un nuevo proceso hijo", "Leer un fichero", "Esperar un semáforo"], c:1},
-    {u:"UD4", q:"Un Deadlock (Interbloqueo) ocurre cuando:", o:["Un proceso va rápido", "Procesos se bloquean mutuamente esperando recursos", "Falla el disco", "Se acaba la batería"], c:1},
-    {u:"UD4", q:"Los hilos (threads) a diferencia de procesos:", o:["No comparten memoria", "Comparten el espacio de direcciones", "Son más pesados", "No necesitan CPU"], c:1},
-    {u:"UD4", q:"La primitiva 'wait' en semáforos:", o:["Incrementa el valor", "Decrementa y puede bloquear", "No hace nada", "Reinicia el sistema"], c:1},
-    {u:"UD4", q:"Comunicación asíncrona significa:", o:["El emisor espera al receptor", "El emisor no espera al receptor", "Van a la misma velocidad", "No hay emisor"], c:1},
-    {u:"UD4", q:"Un mutex es:", o:["Un semáforo binario para exclusión mutua", "Un tipo de memoria", "Un error de bus", "Una instrucción de suma"], c:0},
+            // UD5
+            {u:"UD5", q:"Unidad de control:", o:["E/S datos.", "Gestiona y coordina operaciones.", "Almacena.", "Aritmética."], c:1},
+            {u:"UD5", q:"Verdadera MIPS32:", o:["24 registros.", "Cualquier modo.", "Ancho bus direcciones 4 bytes.", "Palabra 8 bytes."], c:2},
+            {u:"UD5", q:"La unidad de control:", o:["Combinacional.", "Sin ruta datos.", "Cambia salto según ruta datos.", "Sin reloj."], c:2},
+            {u:"UD5", q:"Reloj del procesador:", o:["Sinusoidal.", "Cualquier velocidad.", "Diente sierra.", "Señal cuadrada (0 y 1)."], c:3},
+            {u:"UD5", q:"Un ciclo de 1 ns son:", o:["2 G.", "No se sabe.", "10 G.", "1 G de frecuencia."], c:3},
+            {u:"UD5", q:"Bus de comunicación:", o:["Almacenamiento.", "RAM.", "Líneas transmisión hardware.", "E/S."], c:2},
+            {u:"UD5", q:"Fase FETCH:", o:["Ejecuta.", "Decodifica.", "Almacena.", "Busca instrucción en memoria principal."], c:3},
+            {u:"UD5", q:"Sobre fase Fetch:", o:["Carga en memoria.", "Carga de memoria.", "Sin memoria.", "Banco registros."], c:1},
+            {u:"UD5", q:"Ruta de datos:", o:["Secuencial.", "Contiene registros.", "Máquina Moore.", "Sin ayuda."], c:1},
+            {u:"UD5", q:"ALU:", o:["Con memoria.", "Zero pone a cero.", "Bits Op indican operación.", "Solo con registros."], c:3},
 
-    // UD5
-    {u:"UD5", q:"Bibliotecas estáticas:", o:["Integradas en ejecutables", "Llamada al sistema", "Sin reenlace tras update", "Sin recompilar"], c:0},
-    {u:"UD5", q:"Las direcciones lógicas son:", o:["Entrada a la MMU", "Referencias físicas", "Empiezan en 1", "Distintas para cada proceso"], c:0},
-    {u:"UD5", q:"Particiones dinámicas tienen:", o:["Fragm. Interna", "Fragm. Externa", "Zonas separadas", "Eficiencia fija"], c:1},
-    {u:"UD5", q:"La MMU sirve para:", o:["Sumar números", "Traducir direcciones lógicas a físicas", "Controlar el ratón", "Gestionar el reloj"], c:1},
-    {u:"UD5", q:"En paginación, la fragmentación es:", o:["Externa", "Interna (en la última página)", "No existe", "Total"], c:1},
-    {u:"UD5", q:"El 'Swapping' consiste en:", o:["Cambiar el teclado", "Mover procesos entre memoria principal y disco", "Sumar registros", "Borrar el kernel"], c:1},
-    {u:"UD5", q:"Memoria Virtual permite:", o:["Ejecutar procesos más grandes que la RAM física", "Tener más discos", "Aumentar la frecuencia de reloj", "No usar RAM"], c:0},
-    {u:"UD5", q:"Un 'Page Fault' (Fallo de página) ocurre cuando:", o:["La RAM está rota", "La página no está en memoria principal", "El proceso termina", "Se escribe mal"], c:1},
-    {u:"UD5", q:"El algoritmo LRU para reemplazo de páginas:", o:["Sustituye la más nueva", "Sustituye la menos usada recientemente", "Sustituye al azar", "No existe"], c:1},
-    {u:"UD5", q:"La segmentación de memoria divide el proceso en:", o:["Bloques de tamaño fijo", "Bloques lógicos de tamaño variable", "Bits sueltos", "No lo divide"], c:1},
+            // UD6
+            {u:"UD6", q:"Memoria volátil:", o:["Pierde datos al apagar.", "Solo caché.", "Retiene sin energía.", "Externa."], c:0},
+            {u:"UD6", q:"Fallo de caché:", o:["Permanente.", "Bloque no encontrado en caché.", "Sin refresco.", "Ya en caché."], c:1},
+            {u:"UD6", q:"Más rápida, cara y menor densidad:", o:["SRAM.", "Flash.", "DRAM.", "Magnética."], c:0},
+            {u:"UD6", q:"Acceso a datos cercanos:", o:["Temporal.", "Directo.", "Aleatorio.", "Localidad espacial."], c:3},
+            {u:"UD6", q:"FALSA módulo E/S:", o:["Gestiona periférico.", "Nunca almacena datos.", "Control y tiempo.", "Gestiona CPU."], c:1},
+            {u:"UD6", q:"Memoria volátil:", o:["Flash.", "ROM.", "Discos.", "RAM."], c:3},
+            {u:"UD6", q:"Reemplazo caché al azar:", o:["LRU.", "Directo.", "Aleatorio.", "FIFO."], c:2},
+            {u:"UD6", q:"Sobre el programa:", o:["Lee disco.", "Compila disco.", "Lee instrucciones de memoria principal.", "Alto nivel siempre."], c:2},
+            {u:"UD6", q:"Externa, alta capacidad y bajo costo:", o:["Óptica.", "Semiconductores.", "Magneto-óptica.", "Magnética."], c:3},
+            {u:"UD6", q:"Característica caché:", o:["Externa.", "Lenta.", "Permanente.", "Temporal datos frecuentes."], c:3}
+        ];
 
-    // UD6
-    {u:"UD6", q:"Tercer parámetro de 'open':", o:["Solo si el archivo no existe", "Privilegios dueño", "Privilegios proceso", "Modo R/W"], c:0},
-    {u:"UD6", q:"Controlador de dispositivo:", o:["Hardware nuevo", "Software envía órdenes", "Escribe en registros", "Escribe en memoria principal"], c:3},
-    {u:"UD6", q:"E/S por interrupciones:", o:["Solo proceso usuario", "No interrumpible", "Siempre modo núcleo", "Proceso usuario atiende"], c:2},
-    {u:"UD6", q:"Un inodo en sistemas de ficheros contiene:", o:["El nombre del archivo", "Metadatos y punteros a bloques de datos", "El contenido del texto", "La contraseña del usuario"], c:1},
-    {u:"UD6", q:"La llamada 'lseek' sirve para:", o:["Borrar un archivo", "Mover el puntero de lectura/escritura", "Crear un directorio", "Listar archivos"], c:1},
-    {u:"UD6", q:"En E/S por DMA:", o:["La CPU mueve cada byte", "El controlador mueve bloques a memoria sin CPU", "No se usa memoria", "Es más lento que por programa"], c:1},
-    {u:"UD6", q:"Un enlace simbólico (soft link):", o:["Es una copia del archivo", "Es un puntero al nombre de otro archivo", "Tiene el mismo inodo", "No se puede borrar"], c:1},
-    {u:"UD6", q:"El RAID 0 se utiliza para:", o:["Redundancia total", "Mejorar rendimiento (striping)", "Seguridad de datos", "No existe"], c:1},
-    {u:"UD6", q:"La técnica de 'Spooling' se usa habitualmente en:", o:["Ratones", "Impresoras", "Teclados", "Altavoces"], c:1},
-    {u:"UD6", q:"Un sistema de archivos Journaling:", o:["Es más lento", "Permite recuperación tras fallos mediante un registro", "No usa inodos", "Es solo para Windows"], c:1}
-];
+        let hits = 0, fails = 0, done = 0;
 
-let hits = 0, fails = 0, done = 0;
+        function render() {
+            const box = document.getElementById('quiz-box');
+            questions.forEach((data, i) => {
+                const card = document.createElement('div');
+                card.className = 'q-card';
+                card.innerHTML = `
+                    <span class="unit-badge">${data.u}</span>
+                    <div class="question-text"><strong>${i+1}.</strong> ${data.q}</div>
+                    <div class="options-grid" id="opts-${i}">
+                        ${data.o.map((opt, oi) => `
+                            <div class="option" onclick="check(${i}, ${oi})">${opt}</div>
+                        `).join('')}
+                    </div>
+                `;
+                box.appendChild(card);
+            });
+        }
 
-function render() {
-    const box = document.getElementById('quiz-box');
-    questions.forEach((data, i) => {
-        const card = document.createElement('div');
-        card.className = 'q-card';
-        card.innerHTML = `
-            <span class="unit-badge">${data.u}</span>
-            <div class="question-text"><strong>${i+1}.</strong> ${data.q}</div>
-            <div id="opts-${i}">
-                ${data.o.map((opt, oi) => `<div class="option" onclick="check(${i}, ${oi})">${opt}</div>`).join('')}
-            </div>
-        `;
-        box.appendChild(card);
-    });
-}
+        window.check = (qi, oi) => {
+            const container = document.getElementById(`opts-${qi}`);
+            if(container.classList.contains('disabled')) return;
+            
+            const options = container.querySelectorAll('.option');
+            const correct = questions[qi].c;
+            
+            if(oi === correct) {
+                options[oi].classList.add('correct');
+                hits++;
+            } else {
+                options[oi].classList.add('wrong');
+                options[correct].classList.add('correct');
+                fails++;
+            }
+            
+            done++;
+            container.classList.add('disabled');
+            document.getElementById('hits').innerText = hits;
+            document.getElementById('fails').innerText = fails;
+            document.getElementById('current').innerText = done;
+        };
 
-window.check = (qi, oi) => {
-    const container = document.getElementById(`opts-${qi}`);
-    if(container.classList.contains('disabled')) return;
-    
-    const options = container.querySelectorAll('.option');
-    const correct = questions[qi].c;
-    
-    if(oi === correct) {
-        options[oi].classList.add('correct');
-        hits++;
-    } else {
-        options[oi].classList.add('wrong');
-        options[correct].classList.add('correct');
-        fails++;
-    }
-    
-    done++;
-    container.classList.add('disabled');
-    document.getElementById('hits').innerText = hits;
-    document.getElementById('fails').innerText = fails;
-    document.getElementById('current').innerText = done;
-    document.getElementById('progress-fill').style.width = `${(done/60)*100}%`;
-};
-
-render();
-</script>
+        render();
+    </script>
 </body>
 </html>
